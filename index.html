@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PSU BSIT Login</title>
+<style>
+  * { box-sizing: border-box; margin:0; padding:0; }
+  html, body { height:100%; font-family:'Roboto', sans-serif; background:#f5f5f5; }
+  body { display:flex; justify-content:center; align-items:center; }
+
+  .login-container {
+    width:100%;
+    max-width:400px;
+    padding:40px;
+    background:#fff;
+    border-radius:10px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+    text-align:center;
+  }
+
+  .login-container h2 {
+    margin-bottom:30px;
+    color:#333;
+    font-size:1.8rem;
+  }
+
+  .login-container input {
+    width:100%;
+    padding:12px 15px;
+    margin:10px 0;
+    border:1px solid #ccc;
+    border-radius:5px;
+    font-size:1rem;
+  }
+
+  .login-container button {
+    width:100%;
+    padding:12px;
+    margin-top:20px;
+    border:none;
+    background:#8e8cff;
+    color:#fff;
+    font-size:1rem;
+    border-radius:5px;
+    cursor:pointer;
+    transition:0.3s;
+  }
+
+  .login-container button:hover { background:#6f6fd4; }
+
+  .login-footer {
+    margin-top:20px;
+    font-size:0.9rem;
+    color:#666;
+  }
+
+  .login-footer a {
+    color:#8e8cff;
+    text-decoration:none;
+  }
+  .login-footer a:hover { text-decoration:underline; }
+</style>
+</head>
+<body>
+
+<div class="login-container">
+  <h2>PSU BSIT Login</h2>
+  <input type="text" placeholder="Username" id="username">
+  <input type="password" placeholder="Password" id="password">
+  <a href="main.html"><button id="loginBtn">Login</button></a>
+  <div class="login-footer">
+    Don't have an account? <a href="#">Contact Admin</a>
+  </div>
+</div>
+
+<script>
+    /*
+  const loginBtn = document.getElementById('loginBtn');
+  loginBtn.addEventListener('click', () => {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    if(username === '' || password === '') {
+      alert('Please enter both username and password.');
+      return;
+    }
+
+    // Simulate login, redirect to dashboard.html
+    alert('Login successful!');
+    window.location.href = 'dashboard.html'; // adjust path if needed
+  });*/
+</script>
+
+</body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PSU Faculty Workload Dashboard</title>
+
+<link rel="stylesheet" href="main-style.css">
+ <script src="main-script.js" defer></script>
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>   <!-- Charts -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<div class="top-navbar">
+  <div class="nav-left">
+    <div class="brand">PSU IT Department</div>
+
+    <div class="nav-menu">
+      <div class="nav-item" onclick="switchPanel(0)">Dashboard</div>
+      <div class="nav-item" onclick="switchPanel(1)">Workload Optimization</div>
+      <div class="nav-item" onclick="switchPanel(2)">Reports</div>
+      <div class="nav-item" onclick="switchPanel(3)">Faculty & Subjects</div>
+      <div class="nav-item" onclick="switchPanel(4)">Settings</div>
+      
+
+    </div>
+  </div>
+
+  <div class="nav-right">
+    <div class="search-box">
+      <input type="text" placeholder="Search...">
+    </div>
+
+    <div class="nav-item dropdown">
+      <img src="https://media.istockphoto.com/id/2171382633/vector/user-profile-icon-anonymous-person-symbol-blank-avatar-graphic-vector-illustration.jpg?s=612x612&w=0&k=20&c=ZwOF6NfOR0zhYC44xOX06ryIPAUhDvAajrPsaZ6v1-w=" class="profile-pic" class="profile-pic">
+      <div class="dropdown-content">
+        <div>Profile</div>
+        <div><a href="index.html">Logout</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= PANELS ================= -->
+<div class="panels-wrapper">
+  <div class="panels-container">
+
+    <!-- DASHBOARD -->
+    <div class="panel">
+      <h2>Dashboard</h2>
+      <div class="chart-container">
+        <h3>Bar Graph</h3>
+        <canvas id="dashboardChart"></canvas>
+      </div>
+
+      <h2>Statistics</h2>
+      <tr>
+        <th>Average load</th>
+        <th>Overloaded faculty</th>
+        <th>Balance score</th>
+      </tr>
+    </div>
+
+    <!-- WORKLOAD -->
+    <div class="panel">
+              <h2>Workload Optimization</h2>
+      <br><br><br>
+       <div class="workload-layout">
+
+    <!-- LEFT SIDE -->
+    <div class="workload-controls">
+      <img src="https://i.pinimg.com/originals/fc/24/44/fc2444b08922df34e0f14b9977fa5291.gif" class="images">
+      <p>Powered by Genetic Algorithm</p>
+      <br>
+      <button id="runGA">Run Optimization</button>
+
+      <details>
+        <summary>Advanced Settings</summary><br>
+        <label>Population Size: <input type="number" id="populationSize" value="20"></label>
+        <label>Generations: <input type="number" id="numGenerations" value="50"></label>
+        <label>Mutation Rate: <input type="number" id="mutationRate" value="0.1"></label>
+        <label>Crossover Rate: <input type="number" id="crossoverRate" step="0.1" min="0" max="1" value="0.8"></label>
+      </details>
+    </div>
+
+    <!-- RIGHT SIDE -->
+
+    <div class="workload-table">
+           <h3>Optimization Result</h3><br>
+
+          <!-- LOADING SCREEN -->
+      <div id="gaLoading" class="ga-loading hidden">
+        <div class="loader-row">
+
+          <!-- LEFT: Spinner + Text -->
+          <div class="loader-box">
+            <div class="spinner"></div>
+            <p>Generating Schedule...</p><br>
+            <p>Generation: <span id="generationCounter">0</span></p>
+          </div>
+
+          <!-- RIGHT: Mini live bar chart -->
+          <div class="mini-chart-wrapper">
+            <canvas id="miniDashChart"></canvas>
+          </div>
+
+        </div>
+
+        <!-- BOTTOM: GA Progress Bar -->
+        <div id="gaProgressContainer">
+          <div id="gaProgressBar">
+            <div class="fill"></div>
+          </div>
+        </div>
+      </div>
+        <!-- TABLE -->
+      <div id="gaTableWrapper">
+          <table id="gaScheduleTable">
+            <thead>
+                <tr>
+                  <th data-key="faculty">Faculty <span class="sort-arrow">&#9650;</span></th>
+                  <th data-key="subject">Subject <span class="sort-arrow">&#9650;</span></th>
+                  <th data-key="type">Type <span class="sort-arrow">&#9650;</span></th>
+                  <th data-key="slot">Slot <span class="sort-arrow">&#9650;</span></th>
+                </tr>
+              </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+  </div>
+
+    </div>
+
+    <!-- REPORTS -->
+<div class="panel" id="reportsPanel">
+  <h2>Reports</h2>
+
+  <div class="reports-layout">
+    <!-- LEFT: Pie Chart -->
+    <div class="chart-section">
+      <h3>Faculty Load Distribution (Pie Chart)</h3>
+      <canvas id="reportsChart"></canvas>
+    </div>
+
+    <!-- RIGHT: Bar Chart -->
+    <div class="chart-section">
+      <h3>Faculty Units (Bar Chart)</h3>
+      <canvas id="reportsBarChart"></canvas>
+    </div>
+  </div>
+
+  <!-- SUMMARY TABLE -->
+  <br><br><br>
+  <h3>Summary of Results</h3>
+  <table id="reportsSummaryTable">
+    <thead>
+      <tr>
+        <th>Faculty</th>
+        <th>Days</th>
+        <th>Total Units</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <!-- EXPORT BUTTONS -->
+  <div class="export-buttons">
+    <button id="exportPDF">Export to PDF</button>
+    <button id="exportCSV">Export to CSV</button>
+  </div>
+</div>
+
+    <!-- FACULTY -->
+    <div class="panel">
+      <h2>Faculty & Subjects</h2>
+      <br><br>
+      <h3>Faculty Management</h3>
+      <table id="facultyInputTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Specialization</th>
+            <th>Max Units</th>
+            <th>Availability</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Row template will be cloned -->
+        </tbody>
+      </table>
+      <button id="addFacultyRow">Add Faculty</button>
+      <br><br>
+      <h3>Subjects</h3>
+      <table id="subjectsTable">
+        <thead>
+          <tr>
+            <th>Year</th>
+            <th>Semester</th>
+            <th>Subject Name</th>
+            <th>Type</th>
+            <th>Lec Units</th>
+            <th>Lab Units</th>
+            <th>Total Hours</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <button id="addSubjectRow">Add Subject</button>
+      <br>
+      <div id="subjectsContainer"></div>
+
+      <!-- SUBJECT ROW TEMPLATE -->
+      <template id="subjectRowTemplate">
+        <tr>
+          <td>
+            <select class="subject-year">
+              <option>1st Year</option>
+              <option>2nd Year</option>
+              <option>3rd Year</option>
+            </select>
+          </td>
+
+          <td>
+            <select class="subject-semester">
+              <option>1st Semester</option>
+              <option>2nd Semester</option>
+            </select>
+          </td>
+
+          <td><input type="text" class="subject-name"></td>
+
+          <td>
+            <select class="subject-type">
+              <option value="Software">Software</option>
+              <option value="Networking">Networking</option>
+              <option value="Database">Database</option>
+              <option value="Elective">Elective</option>
+            </select>
+          </td>
+
+          <td><input type="number" class="lec" min="0" value="2"></td>
+          <td><input type="number" class="lab" min="0" value="1"></td>
+
+          <td class="hours">0</td>
+
+          <td><button class="deleteSubject">Delete</button></td>
+        </tr>
+      </template>
+
+      
+    </div>
+
+    <section class="panel">
+      <h2>Settings</h2>
+    </section>
+
+  </div>
+</div>
+
+
+
+</body>
+</html>

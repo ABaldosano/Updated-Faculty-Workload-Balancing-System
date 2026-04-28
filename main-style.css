@@ -1,0 +1,781 @@
+
+/* ==================================================
+   1. GLOBAL / RESET
+================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+  background: #f5f5f5;
+  color: #333;         
+  scroll-behavior: smooth;
+  overflow: hidden; /* prevent double scrolling */
+}
+
+body {
+  display: block;
+}
+
+
+/* ==================================================
+   2. LAYOUT STRUCTURE
+================================================== */
+.panels-wrapper {
+  height: calc(100vh - 60px);
+  margin-top: 70px;
+  width: 100%;
+  overflow-x: hidden; /* no horizontal scroll */
+  padding: 20px;
+}
+
+.panels-container {
+  display: flex;
+  height: 100%;
+  gap: 40px;
+  padding: 0 20px;
+  transition: transform 0.6s ease;
+  scroll-behavior: smooth;
+}
+
+.panel {
+  min-width: calc(100vw - 80px);
+  height: calc(100vh - 90px); 
+ 
+  overflow-y: auto; 
+  overflow-x: hidden;
+
+  background: #fff;
+  border-radius: 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px 40px;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+
+}
+
+.panel:hover {
+  background: #ffffff; 
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.panel > * {
+  max-width: 900px;
+  width: 100%;
+  text-align: center;
+}
+
+/* ================= WORKLOAD SPLIT LAYOUT ================= */
+
+.workload-layout {
+  display: flex;
+  gap: 80px;
+  width: 100%;
+  height: 100%;
+  align-items: flex-start;
+}
+
+/* LEFT SIDE */
+.workload-controls {
+  flex: 1;
+  max-width: 350px;
+  text-align: center;
+  margin-left: -200px;
+}
+
+/* RIGHT SIDE */
+.workload-table {
+  flex: 2;
+  overflow-x: auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  margin-right: -200px;
+  position: relative;
+  min-height: 300px;
+}
+
+/* Fix table alignment (override center) */
+.workload-table table {
+  text-align: center;
+}
+
+/* Make controls look cleaner */
+.workload-controls button {
+  width: 100%;
+  margin: 10px 0;
+}
+
+.workload-controls details {
+  margin-top: 20px;
+}
+
+
+/* ==================================================
+   3. TOP NAVBAR
+================================================== */
+.top-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  z-index: 1000;
+
+  border-bottom: 1px solid #ddd; /* separates from panels */
+  color: #333; /* default text color */
+}
+
+.nav-left {
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 100px;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 10px;
+}
+
+/* RIGHT SIDE */
+.nav-right {
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.top-navbar .nav-item:hover{
+  background: #c0d9ff;
+}
+
+.top-navbar .nav-left {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.top-navbar .nav-center input {
+  width: 300px;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.top-navbar .nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.top-navbar .nav-item {
+  position: relative;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+/* Dropdown */
+.top-navbar .nav-item.dropdown .dropdown-content {
+  display: none;
+  position: absolute;
+  top: 15px;
+  right: 0;
+
+  background: #fff;
+  min-width: 120px;
+
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.top-navbar .nav-item.dropdown:hover .dropdown-content,
+.top-navbar .nav-item.dropdown .dropdown-content:hover {
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.top-navbar .dropdown-content div {
+  padding: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.top-navbar .dropdown-content div:hover {
+  background: #c0d9ff;
+}
+
+.top-navbar .profile-pic {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.nav-item.active {
+  background: #c0d9ff;
+  color: #000;
+}
+
+.nav-item.active {
+  background: #c0d9ff;
+  color: #000;
+}
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  max-width: 70%;       /* limit width so .nav-menu can overflow */
+  overflow: hidden;     /* hide excess items until scroll */
+}
+
+.nav-menu {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;     /* allow horizontal scroll */
+  white-space: nowrap;
+  scrollbar-width: thin;
+  transition: all 0.3s ease;
+}
+
+/* Optional: smooth scroll when dragging or scrolling */
+.nav-menu {
+  scroll-behavior: smooth;
+}
+
+/* WebKit scrollbar styling */
+.nav-menu::-webkit-scrollbar {
+  height: 6px;
+}
+
+.nav-menu::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.3);
+  border-radius: 3px;
+}
+
+.nav-menu::-webkit-scrollbar-track {
+  background: transparent;
+} 
+
+/* ==================================================
+   5. CONTENT ELEMENTS
+================================================== */
+.images {
+  width: 100px;
+  height: auto;
+  border-radius: 20px;
+}
+
+section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+section p {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+table th, table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  font-size: 1rem;
+}
+
+table th {
+  font-weight: 600;
+}
+
+table tr:hover {
+  background: #f0f8ff; /* subtle panel hover tint */
+}
+
+/* Hide utility */
+.hidden {
+  display: none !important;
+}
+
+/* Reports layout: side by side charts */
+.reports-layout {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.chart-section {
+  flex: 1;
+  min-width: 300px;
+  max-width: 500px;
+  height: 350px;
+}
+
+/* Summary table styling */
+#reportsSummaryTable {
+  width: 100%;
+  max-width: 900px;
+  margin: 20px auto;
+  border-collapse: collapse;
+}
+
+#reportsSummaryTable th,
+#reportsSummaryTable td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+#reportsSummaryTable tr:hover {
+  background: #f0f8ff;
+}
+
+/* Export buttons */
+.export-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+/* ================= GA Progress Bar ================= */
+#loadingMiniArea {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* spacing between left/right and bars */
+}
+
+#gaProgressContainer {
+    width: 100%;
+    height: 20px;
+    margin-top: 10px;
+    background: none; /* remove grey cover */
+    overflow: hidden;
+}
+
+#gaProgressBar {
+    margin-top: 5px;
+    width: 100%;
+    height: 8px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #ccc; /* grey background */
+}
+
+#gaProgressBar .fill {
+    width: 0%;
+    height: 100%;
+    transition: width 0.2s linear, background 0.2s linear;
+}
+
+/* Center the generation counter */
+#generationCounter {
+  font-weight: bold;
+  display: block;
+  margin-top: 5px;
+  text-align: center;
+}
+
+/* Loader container styling */
+.ga-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.ga-loading.hidden {
+    display: none;
+}
+
+.loader-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.loader-box {
+    text-align: center;
+}
+
+.loader-box .spinner {
+    border: 4px solid #f3f3f3; /* light gray */
+    border-top: 4px solid #36A2EB; /* blue */
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 10px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.hidden {
+  display: none !important;
+}
+
+/* Mini chart container */
+.mini-chart-wrapper {
+  width: 200px;
+  height: 150px;
+}
+
+#miniDashChart {
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Forms */
+input[type=number] {
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 15px;
+
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+
+  background: #007bff;
+  color: #fff;
+
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+/* Charts */
+.chart-container {
+  width: 100%;
+  max-width: 600px;
+  height: 350px;
+  margin: 0 auto;
+  margin-top: 30px;
+}
+
+section .chart-container,
+section table,
+section form {
+  margin-top: 15px;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+#dashboardChart {
+  min-height: 300px;
+}
+
+.dashboard-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: inherit; /* match table */
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.dashboard-legend-color {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+.dashboard-legend-btn {
+  padding: 2px 6px;
+  font-size: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+.dashboard-legend-btn:hover { background:#eee; }
+
+
+/* ================= FACULTY MANAGEMENT LAYOUT ================= */
+
+.faculty-layout {
+  display: flex;
+  gap: 10px;
+  width: 100%; /* make sure it fills the panel */
+  height: 100%;
+  align-items: flex-start;
+}
+
+/* Table container like workload-table */
+.faculty-table-container {
+  flex: 2;
+  overflow-x: auto;
+  background: #fff;
+  padding: 10px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  min-width: 1400px; /* overall table width bigger */
+  min-width: 100%;
+}
+/* Make the table itself wide */
+#facultyInputTable {
+  width: 1400px;      /* overall width */
+  border-collapse: collapse;
+  table-layout: fixed; /* forces columns to obey widths */
+}
+
+/* Columns width */
+#facultyInputTable th,
+#facultyInputTable td {
+  padding: 15px 10px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Specific columns */
+#facultyInputTable th:nth-child(1),
+#facultyInputTable td:nth-child(1) { width: 450px; } /* Name */
+#facultyInputTable th:nth-child(2),
+#facultyInputTable td:nth-child(2) { width: 300px; } /* Specializations */
+#facultyInputTable th:nth-child(3),
+#facultyInputTable td:nth-child(3) { width: 100px; } /* Max Units */
+#facultyInputTable th:nth-child(4),
+#facultyInputTable td:nth-child(4) { width: 350px; } /* Availability */
+#facultyInputTable th:nth-child(5),
+#facultyInputTable td:nth-child(5) { width: 100px; } /* Remove button */
+/* Zebra stripes & hover */
+#facultyInputTable tbody tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+#facultyInputTable tbody tr:hover {
+  background-color: #f0f8ff;
+}
+
+/* Inputs & selects */
+#facultyInputTable input[type="text"],
+#facultyInputTable input[type="number"],
+#facultyInputTable select {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+#facultyInputTable input[type="text"]:focus,
+#facultyInputTable input[type="number"]:focus,
+#facultyInputTable select:focus {
+  outline: none;
+}
+
+/* Multi-select dropdown */
+#facultyInputTable select[multiple] {
+  height: 200px;
+}
+
+/* Availability checkboxes layout */
+#facultyInputTable td div {
+  display: flex;
+  gap: 10px; /* more space between checkboxes */
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Buttons */
+#addFacultyRow {
+  color: #fff;
+  margin-top: 20px;
+  font-size: 14px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+#facultyInputTable button {
+  background: #ec4657;
+  color: #fff;
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+#facultyInputTable button:hover {
+  background: #ac333f;
+}
+
+
+
+
+/* ================= MULTI-DROPDOWN CHECKBOX ================= */
+/* Multi-select dropdown styling */
+/* Multi-select dropdown */
+.multi-select-dropdown {
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+}
+.multi-select-dropdown .dropdown-btn {
+  padding: 6px 12px;
+  background: #f0f0f0;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  text-align: left;
+  font-size: 14px;
+}
+
+.multi-select-dropdown .dropdown-content {
+  display: none;
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 150%;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  z-index: 10;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+
+  display: flex;              /* keep flex for vertical stacking */
+  flex-direction: column;     /* stack items vertically */
+  justify-content: flex-start; /* start at top */
+  align-items: flex-start;     /* align left */
+}
+
+.multi-select-dropdown .dropdown-content label {
+  display: flex;
+  gap: 8px;
+  align-items: center; /* checkbox and text aligned vertically */
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+  padding: 5px 10px;
+}
+
+.multi-select-dropdown .dropdown-content label:hover {
+  background-color: #f0f8ff;
+}
+
+.multi-select-dropdown.show .dropdown-content {
+  display: block;
+}
+
+
+.multi-select-dropdown {
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+}
+
+.dropdown-btn {
+  border: 1px solid #ccc;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #fff;
+  text-align: left;
+  font-size: 14px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  z-index: 10;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+  align-items: left;
+}
+
+.dropdown-content .options {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.dropdown-content .dropdown-footer {
+  margin-top: 10px;
+  text-align: right;
+}
+
+.dropdown-content .dropdown-footer button {
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.selected-specializations {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-top: 8px;
+  text-align: left;
+}
