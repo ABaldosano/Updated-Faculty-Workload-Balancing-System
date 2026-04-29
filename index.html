@@ -1,782 +1,95 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Arthur Baldosano Jr. Portfolio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="favicon.png">
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="UTF-8">
+<title>PSU BSIT Login</title>
+<style>
+  * { box-sizing: border-box; margin:0; padding:0; }
+  html, body { height:100%; font-family:'Roboto', sans-serif; background:#f5f5f5; }
+  body { display:flex; justify-content:center; align-items:center; }
 
-    :root, [data-theme="light"] {
-      --bg:      #ffffff;
-      --bg2:     #fafafa;
-      --bg3:     #f5f5f5;
-      --gold:    #171717;
-      --gold-dim:#525252;
-      --cream:   #0a0a0a;
-      --muted:   #737373;
-      --text:    #0a0a0a;
-      --border:  rgba(0,0,0,0.1);
-      --nav-bg:  rgba(255,255,255,0.97);
-      --tag-bg:  rgba(0,0,0,0.04);
-    }
-    [data-theme="dark"] {
-      --bg:      #0a0a0a;
-      --bg2:     #141414;
-      --bg3:     #1f1f1f;
-      --gold:    #e5e5e5;
-      --gold-dim:#525252;
-      --cream:   #fafafa;
-      --muted:   #737373;
-      --text:    #fafafa;
-      --border:  rgba(255,255,255,0.08);
-      --nav-bg:  rgba(10,10,10,0.97);
-      --tag-bg:  rgba(255,255,255,0.04);
-    }
+  .login-container {
+    width:100%;
+    max-width:400px;
+    padding:40px;
+    background:#fff;
+    border-radius:10px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+    text-align:center;
+  }
 
-    html { scroll-behavior: smooth; }
+  .login-container h2 {
+    margin-bottom:30px;
+    color:#333;
+    font-size:1.8rem;
+  }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-weight: 400;
-      line-height: 1.75;
-      overflow-x: hidden;
-      cursor: none;
-      transition: background 0.4s ease, color 0.4s ease;
-    }
+  .login-container input {
+    width:100%;
+    padding:12px 15px;
+    margin:10px 0;
+    border:1px solid #ccc;
+    border-radius:5px;
+    font-size:1rem;
+  }
 
-    /* FONT ASSIGNMENTS */
-    .hero-name, .section-title, .contact-big,
-    .featured-title, .nav-logo, .footer-logo { font-family: 'Playfair Display', serif; }
+  .login-container button {
+    width:100%;
+    padding:12px;
+    margin-top:20px;
+    border:none;
+    background:#8e8cff;
+    color:#fff;
+    font-size:1rem;
+    border-radius:5px;
+    cursor:pointer;
+    transition:0.3s;
+  }
 
-    .hero-name { font-weight: 700; }
-    .section-title { font-weight: 600; }
-    .featured-title { font-weight: 600; font-size: 1.8rem; line-height: 1.2; }
-    .project-name { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 1.3rem; }
+  .login-container button:hover { background:#6f6fd4; }
 
-    .hero-eyebrow, .section-label, .hero-badge, .tag, .stat-label,
-    .btn-primary, .btn-outline, .contact-link, .featured-link,
-    .featured-badge, .paid-badge, .hero-scroll-hint {
-      font-family: 'Inter', sans-serif;
-      font-weight: 500;
-    }
+  .login-footer {
+    margin-top:20px;
+    font-size:0.9rem;
+    color:#666;
+  }
 
-    .hero-desc, .about-bio, .project-desc, .featured-desc,
-    .contact-sub, .projects-header-right {
-      font-family: 'Inter', sans-serif;
-      font-weight: 400;
-      font-size: 0.95rem;
-    }
-
-    .about-bio strong { font-weight: 600; color: var(--cream); }
-    .stat-num { font-family: 'Playfair Display', serif; font-weight: 700; }
-    .nav-links a { font-weight: 500; }
-
-    /* CURSOR */
-    .cursor {
-      width: 8px; height: 8px;
-      background: var(--gold); border-radius: 50%;
-      position: fixed; pointer-events: none;
-      z-index: 9999;
-      transition: transform 0.1s ease;
-      transform: translate(-50%, -50%);
-    }
-    .cursor-ring {
-      width: 32px; height: 32px;
-      border: 1px solid rgba(212,80,10,0.35);
-      border-radius: 50%;
-      position: fixed; pointer-events: none;
-      z-index: 9998;
-      transition: all 0.15s ease;
-      transform: translate(-50%, -50%);
-    }
-    [data-theme="dark"] .cursor-ring { border-color: rgba(240,120,64,0.35); }
-
-    /* NAV */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 500;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 24px 60px;
-      background: var(--nav-bg);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      transition: background 0.4s, border-color 0.4s;
-    }
-    .nav-logo {
-      font-size: 1.1rem; font-weight: 600;
-      letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--gold); text-decoration: none;
-    }
-    .nav-right { display: flex; align-items: center; gap: 40px; }
-    .nav-links { display: flex; gap: 36px; list-style: none; }
-    .nav-links a {
-      text-decoration: none; color: var(--muted);
-      font-size: 0.75rem; letter-spacing: 0.2em;
-      text-transform: uppercase; transition: color 0.3s;
-    }
-    .nav-links a:hover { color: var(--gold); }
-
-    /* THEME TOGGLE */
-    .theme-toggle {
-      background: none;
-      border: 1px solid var(--border);
-      cursor: none;
-      width: 46px; height: 26px;
-      border-radius: 13px;
-      position: relative;
-      transition: border-color 0.3s;
-      flex-shrink: 0;
-    }
-    .theme-toggle:hover { border-color: var(--gold); }
-    .toggle-thumb {
-      position: absolute; top: 3px; left: 3px;
-      width: 18px; height: 18px; border-radius: 50%;
-      background: var(--gold);
-      transition: transform 0.3s ease;
-    }
-    [data-theme="dark"] .toggle-thumb { transform: translateX(20px); }
-    .t-icon {
-      position: absolute; font-size: 9px;
-      top: 50%; transform: translateY(-50%);
-      pointer-events: none; transition: opacity 0.3s;
-    }
-    .t-sun { right: 6px; opacity: 1; }
-    .t-moon { left: 6px; opacity: 0; }
-    [data-theme="dark"] .t-sun { opacity: 0; }
-    [data-theme="dark"] .t-moon { opacity: 1; }
-
-    /* HERO */
-    #hero {
-      min-height: 100vh;
-      display: grid; grid-template-columns: 1fr 1fr;
-      position: relative; overflow: hidden;
-    }
-    .hero-left {
-      display: flex; flex-direction: column;
-      justify-content: flex-end;
-      padding: 140px 60px 80px;
-      position: relative; z-index: 2;
-    }
-    .hero-eyebrow {
-      font-size: 0.7rem; letter-spacing: 0.35em;
-      text-transform: uppercase; color: var(--gold);
-      margin-bottom: 24px;
-      opacity: 0; animation: fadeUp 1s ease 0.3s forwards;
-    }
-    .hero-name {
-      font-size: clamp(3.5rem, 6vw, 6rem);
-      line-height: 1.0; color: var(--cream);
-      margin-bottom: 32px;
-      opacity: 0; animation: fadeUp 1s ease 0.5s forwards;
-    }
-    .hero-name em { font-style: italic; color: var(--gold); }
-    .hero-desc {
-      color: var(--muted); max-width: 380px;
-      line-height: 1.9; margin-bottom: 32px;
-      opacity: 0; animation: fadeUp 1s ease 0.7s forwards;
-    }
-    .hero-badges {
-      display: flex; gap: 8px; flex-wrap: wrap;
-      margin-bottom: 40px;
-      opacity: 0; animation: fadeUp 1s ease 0.75s forwards;
-    }
-    .hero-badge {
-      padding: 5px 14px;
-      border: 1px solid var(--border);
-      background: var(--tag-bg);
-      font-size: 0.65rem; letter-spacing: 0.18em;
-      text-transform: uppercase; color: var(--gold);
-    }
-    .hero-cta {
-      display: flex; gap: 20px;
-      opacity: 0; animation: fadeUp 1s ease 0.9s forwards;
-    }
-    .btn-primary {
-      padding: 14px 36px;
-      background: var(--gold); color: #fff;
-      text-decoration: none;
-      font-size: 0.75rem; letter-spacing: 0.2em;
-      text-transform: uppercase;
-      transition: opacity 0.3s;
-    }
-    .btn-primary:hover { opacity: 0.82; }
-    .btn-outline {
-      padding: 14px 36px;
-      border: 1px solid var(--border);
-      color: var(--muted); text-decoration: none;
-      font-size: 0.75rem; letter-spacing: 0.2em;
-      text-transform: uppercase; transition: all 0.3s;
-    }
-    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
-
-    .hero-right {
-      position: relative; display: flex;
-      align-items: center; justify-content: center;
-    }
-    .hero-img-wrap {
-      width: 420px; height: 560px; position: relative;
-      opacity: 0; animation: fadeIn 1.2s ease 0.8s forwards;
-    }
-    .hero-img-wrap::before {
-      content: ''; position: absolute; inset: -1px;
-      border: 1px solid var(--border);
-    }
-    .hero-img-wrap::after {
-      content: ''; position: absolute;
-      bottom: -20px; right: -20px;
-      width: 100%; height: 100%;
-      border: 1px solid var(--border); opacity: 0.5; z-index: -1;
-    }
-    /* HERO PHOTO — put your image in the same folder, replace INSERT_HERO_PHOTO.jpg */
-    .hero-photo { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .hero-photo-placeholder {
-      width: 100%; height: 100%; background: var(--bg3);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 14px; color: var(--muted);
-      font-size: 0.72rem; letter-spacing: 0.1em;
-      text-transform: uppercase; text-align: center; padding: 20px;
-    }
-
-    .hero-scroll-hint {
-      position: absolute; bottom: 48px; left: 60px;
-      display: flex; align-items: center; gap: 16px;
-      font-size: 0.65rem; letter-spacing: 0.25em;
-      text-transform: uppercase; color: var(--muted);
-      opacity: 0; animation: fadeIn 1s ease 1.5s forwards;
-    }
-    .scroll-line {
-      width: 48px; height: 1px; background: var(--gold-dim);
-      position: relative; overflow: hidden;
-    }
-    .scroll-line::after {
-      content: ''; position: absolute;
-      left: -100%; top: 0; width: 100%; height: 100%;
-      background: var(--gold); animation: scrollLine 2s ease infinite;
-    }
-    @keyframes scrollLine { to { left: 100%; } }
-
-    .grid-line { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
-    .grid-line::before {
-      content: ''; position: absolute;
-      top: 0; bottom: 0; left: 50%; width: 1px;
-      background: linear-gradient(to bottom, transparent, var(--border) 30%, var(--border) 70%, transparent);
-    }
-
-    /* SHARED */
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 60px; }
-    .section-label {
-      font-size: 0.65rem; letter-spacing: 0.4em;
-      text-transform: uppercase; color: var(--gold);
-      margin-bottom: 16px;
-      display: flex; align-items: center; gap: 16px;
-    }
-    .section-label::before { content: ''; width: 32px; height: 1px; background: var(--gold-dim); }
-    .section-title {
-      font-size: clamp(2.5rem, 4vw, 3.8rem);
-      line-height: 1.1; color: var(--cream); margin-bottom: 24px;
-    }
-    .section-title em { font-style: italic; color: var(--gold); }
-
-    /* ABOUT */
-    #about { padding: 140px 0; background: var(--bg2); transition: background 0.4s; }
-    .about-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 100px; align-items: center;
-    }
-    .about-img-wrap { position: relative; }
-    .about-img-frame {
-      width: 100%; aspect-ratio: 3/4;
-      background: var(--bg3); position: relative;
-      overflow: hidden; transition: background 0.4s;
-    }
-    /* ABOUT PHOTO — put your image in the same folder, replace INSERT_ABOUT_PHOTO.jpg */
-    .about-photo { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .about-photo-placeholder {
-      width: 100%; height: 100%;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 14px; color: var(--muted);
-      font-size: 0.72rem; letter-spacing: 0.1em;
-      text-transform: uppercase; text-align: center; padding: 20px;
-    }
-    .about-tag {
-      position: absolute; bottom: -24px; right: -24px;
-      background: var(--gold); color: #fff;
-      padding: 20px 28px; font-size: 0.7rem;
-      letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600;
-    }
-    .about-bio { color: var(--muted); line-height: 1.9; margin-bottom: 40px; }
-    .about-bio p + p { margin-top: 20px; }
-    .skills-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 12px; margin-bottom: 48px;
-    }
-    .skill-item {
-      display: flex; align-items: center;
-      gap: 12px; font-size: 0.82rem; color: var(--muted);
-    }
-    .skill-dot { width: 5px; height: 5px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
-    .about-stats {
-      display: flex; gap: 40px;
-      padding-top: 40px; border-top: 1px solid var(--border);
-    }
-    .stat-num { font-size: 2.5rem; color: var(--gold); line-height: 1; }
-    .stat-label {
-      font-size: 0.7rem; letter-spacing: 0.15em;
-      text-transform: uppercase; color: var(--muted); margin-top: 6px;
-    }
-
-    /* PROJECTS */
-    #projects { padding: 140px 0; background: var(--bg); transition: background 0.4s; }
-    .projects-header {
-      display: flex; justify-content: space-between;
-      align-items: flex-end; margin-bottom: 80px;
-    }
-    .projects-header-right {
-      color: var(--muted); max-width: 280px;
-      text-align: right; line-height: 1.8;
-    }
-
-    /* Project card */
-    .project-featured {
-      margin-bottom: 24px;
-      background: var(--bg3); border: 1px solid var(--border);
-      display: grid; grid-template-columns: 1fr 1fr;
-      transition: background 0.4s, border-color 0.4s;
-    }
-    .project-featured-img {
-      min-height: 340px; position: relative;
-      overflow: hidden; background: var(--bg2);
-    }
-    /* SCREENSHOT — place image file in same folder as index.html */
-    .featured-screenshot {
-      width: 100%; height: 100%;
-      object-fit: cover; object-position: top;
-      position: absolute; inset: 0; display: block;
-    }
-    .screenshot-placeholder {
-      width: 100%; height: 100%;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 12px; color: var(--muted);
-      font-size: 0.72rem; letter-spacing: 0.1em;
-      text-transform: uppercase; text-align: center; padding: 20px;
-      position: absolute; inset: 0;
-    }
-    .project-featured-content {
-      padding: 60px; display: flex;
-      flex-direction: column; justify-content: center;
-    }
-    .featured-badge {
-      font-size: 0.65rem; letter-spacing: 0.3em;
-      text-transform: uppercase; color: var(--gold); margin-bottom: 20px;
-    }
-    .featured-desc { color: var(--muted); line-height: 1.8; margin-bottom: 32px; }
-    .featured-links { display: flex; gap: 16px; flex-wrap: wrap; }
-    .featured-link {
-      display: inline-flex; align-items: center; gap: 10px;
-      color: var(--gold); text-decoration: none;
-      font-size: 0.75rem; letter-spacing: 0.2em;
-      text-transform: uppercase; transition: gap 0.3s;
-    }
-    .featured-link:hover { gap: 16px; }
-
-    .tag {
-      padding: 4px 12px; background: var(--tag-bg);
-      border: 1px solid var(--border);
-      font-size: 0.65rem; letter-spacing: 0.15em;
-      text-transform: uppercase; color: var(--muted);
-    }
-    .paid-badge {
-      color: var(--gold); font-size: 0.68rem;
-      letter-spacing: 0.12em; text-transform: uppercase; margin-left: 8px;
-    }
-
-    /* CONTACT */
-    #contact { padding: 140px 0; background: var(--bg2); text-align: center; transition: background 0.4s; }
-    .contact-inner { max-width: 700px; margin: 0 auto; }
-    .contact-big {
-      font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 700;
-      color: var(--cream); line-height: 1.05; margin-bottom: 32px;
-    }
-    .contact-big em { font-style: italic; color: var(--gold); }
-    .contact-sub { color: var(--muted); margin-bottom: 56px; line-height: 1.9; }
-    .contact-links { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
-    .contact-link {
-      display: flex; align-items: center; gap: 10px;
-      text-decoration: none; color: var(--muted);
-      font-size: 0.78rem; letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 16px 26px;
-      border: 1px solid var(--border);
-      background: var(--tag-bg); transition: all 0.3s;
-    }
-    .contact-link:hover { border-color: var(--gold); color: var(--gold); }
-
-    /* FOOTER */
-    footer {
-      padding: 32px 60px; background: var(--bg);
-      display: flex; justify-content: space-between; align-items: center;
-      border-top: 1px solid var(--border);
-      transition: background 0.4s, border-color 0.4s;
-    }
-    footer p { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; }
-    .footer-logo {
-      font-size: 0.9rem; font-weight: 600;
-      letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold);
-    }
-
-    /* ANIMATIONS */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    .reveal-delay-1 { transition-delay: 0.1s; }
-    .reveal-delay-2 { transition-delay: 0.2s; }
-    .reveal-delay-3 { transition-delay: 0.3s; }
-    .reveal-delay-4 { transition-delay: 0.4s; }
-
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
-      nav { padding: 20px 24px; }
-      .nav-links { gap: 20px; }
-      #hero { grid-template-columns: 1fr; }
-      .hero-left { padding: 120px 28px 60px; }
-      .hero-right { display: none; }
-      .container { padding: 0 28px; }
-      .about-grid { grid-template-columns: 1fr; gap: 60px; }
-      .about-tag { display: none; }
-      .projects-header { flex-direction: column; align-items: flex-start; gap: 20px; }
-      .projects-header-right { text-align: left; }
-      .project-featured { grid-template-columns: 1fr; }
-      .project-featured-content { padding: 36px 28px; }
-      footer { flex-direction: column; gap: 12px; text-align: center; padding: 28px; }
-    }
-  </style>
+  .login-footer a {
+    color:#8e8cff;
+    text-decoration:none;
+  }
+  .login-footer a:hover { text-decoration:underline; }
+</style>
 </head>
 <body>
 
-  <div class="cursor" id="cursor"></div>
-  <div class="cursor-ring" id="cursorRing"></div>
+<div class="login-container">
+  <h2>PSU BSIT Login</h2>
+  <input type="text" placeholder="Username" id="username">
+  <input type="password" placeholder="Password" id="password">
+  <a href="main.html"><button id="loginBtn">Login</button></a>
+  <div class="login-footer">
+    Don't have an account? <a href="#">Contact Admin</a>
+  </div>
+</div>
 
-  <!-- NAV -->
-  <nav>
-    <a href="#hero" class="nav-logo">A.B.Jr</a>
-    <div class="nav-right">
-      <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-      <button class="theme-toggle" id="themeToggle" title="Toggle dark / light mode">
-        <div class="toggle-thumb"></div>
-        <span class="t-icon t-sun">☀</span>
-        <span class="t-icon t-moon">☽</span>
-      </button>
-    </div>
-  </nav>
+<script>
+    /*
+  const loginBtn = document.getElementById('loginBtn');
+  loginBtn.addEventListener('click', () => {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
 
-  <!-- HERO -->
-  <section id="hero">
-    <div class="grid-line"></div>
-    <div class="hero-left">
-      <p class="hero-eyebrow">BSIT Student · PSU-SITE President · Puerto Princesa, Palawan</p>
-      <h1 class="hero-name">Arthur<br><em>Baldosano</em><br>Jr.</h1>
-      <p class="hero-desc">
-        IT developer, student leader, and freelance builder from Palawan.
-        Focused on Data Analytics, E-Commerce, and systems that solve real problems.
-      </p>
-      <div class="hero-badges">
-        <span class="hero-badge">Data Analytics</span>
-        <span class="hero-badge">E-Commerce</span>
-        <span class="hero-badge">Self Employed</span>
-        <span class="hero-badge">PSU-SITE President</span>
-      </div>
-      <div class="hero-cta">
-        <a href="#projects" class="btn-primary">View Work</a>
-        <a href="#contact" class="btn-outline">Get in Touch</a>
-      </div>
-    </div>
-    <div class="hero-right">
-      <div class="hero-img-wrap">
-        <img src="pfp.jpg" alt="Arthur Baldosano Jr." class="hero-photo" />
-      </div>
-    </div>
-    <div class="hero-scroll-hint">
-      <div class="scroll-line"></div>
-      Scroll to explore
-    </div>
-  </section>
+    if(username === '' || password === '') {
+      alert('Please enter both username and password.');
+      return;
+    }
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="container">
-      <div class="about-grid">
+    // Simulate login, redirect to dashboard.html
+    alert('Login successful!');
+    window.location.href = 'dashboard.html'; // adjust path if needed
+  });*/
+</script>
 
-        <div class="about-img-wrap reveal">
-          <div class="about-img-frame">
-            <img src="about.jpg" alt="Arthur" class="about-photo" />
-          </div>
-          <div class="about-tag">Based in<br>Palawan, PH</div>
-        </div>
-
-        <div class="about-content">
-          <div class="reveal reveal-delay-1">
-            <p class="section-label">About Me</p>
-            <h2 class="section-title">Developer.<br><em>Leader.</em><br>Builder.</h2>
-          </div>
-          <div class="about-bio reveal reveal-delay-2">
-            <p>
-              I'm <strong>Arthur Baldosano Jr.</strong>, a BSIT student at
-              <strong>Palawan State University</strong>, specializing in
-              <strong>Data Analytics & E-Commerce</strong>.
-              I currently serve as <strong>PSU-SITE President</strong> and run my own freelance IT work independently.
-            </p>
-            <p>
-              I build websites, information systems, and digital tools — focused on creating things
-              that look sharp, work reliably, and solve real problems.
-            </p>
-          </div>
-          <div class="skills-grid reveal reveal-delay-3">
-            <div class="skill-item"><div class="skill-dot"></div>HTML / CSS / JavaScript</div>
-            <div class="skill-item"><div class="skill-dot"></div>C Programming</div>
-            <div class="skill-item"><div class="skill-dot"></div>Data Analytics</div>
-            <div class="skill-item"><div class="skill-dot"></div>E-Commerce</div>
-            <div class="skill-item"><div class="skill-dot"></div>System Design</div>
-            <div class="skill-item"><div class="skill-dot"></div>Git & GitHub</div>
-            <div class="skill-item"><div class="skill-dot"></div>Google Sites</div>
-            <div class="skill-item"><div class="skill-dot"></div>Student Leadership</div>
-          </div>
-          <div class="about-stats reveal reveal-delay-4">
-            <div>
-              <div class="stat-num">3</div>
-              <div class="stat-label">Live Projects</div>
-            </div>
-            <div>
-              <div class="stat-num">1</div>
-              <div class="stat-label">Paid Client</div>
-            </div>
-            <div>
-              <div class="stat-num">PSU</div>
-              <div class="stat-label">SITE President</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- PROJECTS -->
-  <section id="projects">
-    <div class="container">
-      <div class="projects-header reveal">
-        <div>
-          <p class="section-label">Selected Work</p>
-          <h2 class="section-title">Projects &<br><em>Accomplishments</em></h2>
-        </div>
-        <p class="projects-header-right">
-          A curated collection of live systems, websites, and solutions — from coursework and leadership to real freelance work.
-        </p>
-      </div>
-
-      <!-- PROJECT 1: Faculty Workload -->
-      <div class="project-featured reveal">
-        <div class="project-featured-img">
-          <!-- SCREENSHOT: place fwb.png in same folder as index.html -->
-          <img src="fwb.png" alt="Faculty Workload Balancing System" class="featured-screenshot" />
-        </div>
-        <div class="project-featured-content">
-          <p class="featured-badge">⭐ Featured Project</p>
-          <h3 class="featured-title">Faculty Workload Balancing System</h3>
-          <p class="featured-desc">
-            A web-based system designed to efficiently manage and distribute faculty workloads.
-            Built to solve a real institutional problem at PSU using modern web technologies.
-          </p>
-          <div style="display:flex; gap:10px; margin-bottom:32px; flex-wrap:wrap;">
-            <span class="tag">HTML</span>
-            <span class="tag">CSS</span>
-            <span class="tag">JavaScript</span>
-          </div>
-          <div class="featured-links">
-            <a href="https://abaldosano.github.io/Updated-Faculty-Workload-Balancing-System/index.html" target="_blank" class="featured-link">Live Demo <span>→</span></a>
-            <a href="https://github.com/ABaldosano" target="_blank" class="featured-link" style="opacity:0.6;">GitHub <span>→</span></a>
-          </div>
-        </div>
-      </div>
-
-      <!-- PROJECT 2: Buzy Reviewer -->
-      <div class="project-featured reveal reveal-delay-1">
-        <div class="project-featured-img">
-          <!-- SCREENSHOT: place bz.png in same folder as index.html -->
-          <img src="br.png" alt="Buzy Reviewer" class="featured-screenshot" />
-        </div>
-        <div class="project-featured-content">
-          <p class="featured-badge">01 — Live Project</p>
-          <h3 class="featured-title">Buzy Reviewer</h3>
-          <p class="featured-desc">
-            An interactive reviewer web app built entirely from scratch and deployed live on GitHub Pages.
-          </p>
-          <div style="display:flex; gap:10px; margin-bottom:32px; flex-wrap:wrap;">
-            <span class="tag">HTML</span>
-            <span class="tag">CSS</span>
-            <span class="tag">JavaScript</span>
-          </div>
-          <div class="featured-links">
-            <a href="https://abaldosano.github.io/Buzy-Reviewer/index.html" target="_blank" class="featured-link">Live Demo <span>→</span></a>
-            <a href="https://github.com/ABaldosano" target="_blank" class="featured-link" style="opacity:0.6;">GitHub <span>→</span></a>
-          </div>
-        </div>
-      </div>
-
-      <!-- PROJECT 3: Google Sites -->
-      <div class="project-featured reveal reveal-delay-2">
-        <div class="project-featured-img">
-          <!-- SCREENSHOT: place schoolsite.png in same folder as index.html -->
-          <img src="schoolsite.png" alt="Class and School Website" class="featured-screenshot" />
-        </div>
-        <div class="project-featured-content">
-          <p class="featured-badge">02 — Freelance · <span class="paid-badge">✦ Paid</span></p>
-          <h3 class="featured-title">Class & School Website</h3>
-          <p class="featured-desc">
-            Freelance client project — designed and delivered a complete class & school website using Google Sites for a paying client.
-          </p>
-          <div style="display:flex; gap:10px; margin-bottom:32px; flex-wrap:wrap;">
-            <span class="tag">Freelance</span>
-            <span class="tag">Google Sites</span>
-            <span class="tag">Paid</span>
-          </div>
-          <div class="featured-links">
-            <a href="https://sites.google.com/view/helenbaldosano-schoolandclass?usp=sharing" target="_blank" class="featured-link">Visit Site <span>→</span></a>
-          </div>
-        </div>
-      </div>
-
-      <!--
-      ══ ADD MORE PROJECTS — copy the block below ══
-      <div class="project-featured reveal">
-        <div class="project-featured-img">
-          <img src="SCREENSHOT.png" alt="Project Name" class="featured-screenshot" />
-        </div>
-        <div class="project-featured-content">
-          <p class="featured-badge">03 — Project Type</p>
-          <h3 class="featured-title">Project Name</h3>
-          <p class="featured-desc">Description of the project.</p>
-          <div style="display:flex; gap:10px; margin-bottom:32px; flex-wrap:wrap;">
-            <span class="tag">HTML</span>
-          </div>
-          <div class="featured-links">
-            <a href="YOUR_LINK" target="_blank" class="featured-link">Live Demo <span>→</span></a>
-          </div>
-        </div>
-      </div>
-      -->
-
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="container">
-      <div class="contact-inner">
-        <div class="reveal">
-          <p class="section-label" style="justify-content:center;">Let's Connect</p>
-          <h2 class="contact-big">Have a project<br>in <em>mind?</em></h2>
-          <p class="contact-sub">
-            Open to freelance work, collaborations, and opportunities.<br>
-            Based in Puerto Princesa, Palawan — available remotely.
-          </p>
-        </div>
-        <div class="contact-links reveal reveal-delay-1">
-          <a href="mailto:arthurjuniorbaldosano@gmail.com" class="contact-link">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
-            Email Me
-          </a>
-          <a href="https://github.com/ABaldosano" target="_blank" class="contact-link">
-            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.1-1.46-1.1-1.46-.9-.62.07-.6.07-.6 1 .07 1.52 1.02 1.52 1.02.89 1.52 2.33 1.08 2.9.83.09-.65.35-1.08.63-1.33-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.26-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 6.8c.85 0 1.7.11 2.5.33 1.9-1.29 2.74-1.02 2.74-1.02.55 1.37.2 2.38.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.85-2.34 4.7-4.57 4.95.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10.01 10.01 0 0 0 22 12c0-5.52-4.48-10-10-10z"/></svg>
-            GitHub
-          </a>
-          <a href="https://www.linkedin.com/in/arthur-baldosano-jr-2b5607406" target="_blank" class="contact-link">
-            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2zm2-3a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
-            LinkedIn
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <span class="footer-logo">Arthur Baldosano Jr.</span>
-    <p>© 2025 — Designed & Built by Arthur Baldosano Jr.</p>
-    <p>Puerto Princesa, Palawan, Philippines</p>
-  </footer>
-
-  <script>
-    // THEME TOGGLE
-    const html = document.documentElement;
-    const btn  = document.getElementById('themeToggle');
-    html.setAttribute('data-theme', localStorage.getItem('portfolio-theme') || 'light');
-    btn.addEventListener('click', () => {
-      const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-      html.setAttribute('data-theme', next);
-      localStorage.setItem('portfolio-theme', next);
-    });
-
-    // CUSTOM CURSOR
-    const cursor = document.getElementById('cursor');
-    const ring   = document.getElementById('cursorRing');
-    let mx = 0, my = 0, rx = 0, ry = 0;
-    document.addEventListener('mousemove', e => {
-      mx = e.clientX; my = e.clientY;
-      cursor.style.left = mx + 'px';
-      cursor.style.top  = my + 'px';
-    });
-    (function loop() {
-      rx += (mx - rx) * 0.12;
-      ry += (my - ry) * 0.12;
-      ring.style.left = rx + 'px';
-      ring.style.top  = ry + 'px';
-      requestAnimationFrame(loop);
-    })();
-    document.querySelectorAll('a, button').forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
-        ring.style.transform   = 'translate(-50%,-50%) scale(1.5)';
-      });
-      el.addEventListener('mouseleave', () => {
-        cursor.style.transform = 'translate(-50%,-50%) scale(1)';
-        ring.style.transform   = 'translate(-50%,-50%) scale(1)';
-      });
-    });
-
-    // SCROLL REVEAL
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
-      });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
-
-    // NAV ACTIVE
-    const secs  = document.querySelectorAll('section[id]');
-    const navAs = document.querySelectorAll('.nav-links a');
-    window.addEventListener('scroll', () => {
-      let cur = '';
-      secs.forEach(s => { if (window.scrollY >= s.offsetTop - 200) cur = s.id; });
-      navAs.forEach(a => { a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--gold)' : ''; });
-    });
-  </script>
 </body>
 </html>
